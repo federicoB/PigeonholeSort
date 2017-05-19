@@ -18,7 +18,6 @@
  */
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 /**
  * Static class containing sort method using pigeonhole algorithm.
@@ -50,29 +49,32 @@ public abstract class Pigeonhole {
    * @param arrayToSort Type[]: the array to sort
    * @param <Type> Type of the array, inferred.
    */
-  private static <Type> void fillTmpArray(LinkedList<?>[] tmpArray, Type[] arrayToSort) {
+  private static <Type> void fillTmpArray(ArrayList<?>[] tmpArray, Type[] arrayToSort) {
     for (Type element : arrayToSort) {
       Integer hashCode = element.hashCode();
       if (tmpArray[hashCode] == null) {
-        tmpArray[hashCode] = new LinkedList<Type>();
+        tmpArray[hashCode] = new ArrayList<Type>();
       }
-      LinkedList<Type> elementList = (LinkedList<Type>) tmpArray[hashCode];
+      ArrayList<Type> elementList = (ArrayList<Type>) tmpArray[hashCode];
       elementList.add(element);
     }
   }
 
   /**
-   * Iterate through an array of list and concatenate them.
-   * @param tmpArray LinkedList<Type>[]: the array to iterate
-   * @param finalList ArrayList<Type>: the result of the concatenation
-   * @param <Type> Type of the array, inferred.
+   * Iterate through an array of list and concat them into the array to sort
+   *
+   * @param tmpArray    LinkedList<Type>[]: the array to iterate
+   * @param arrayToSort ype[]: the array to sort
+   * @param <Type>      Type of the array, inferred.
    */
-  private static <Type> void createFinalList(LinkedList<?>[] tmpArray, ArrayList<Type> finalList) {
-    int length = tmpArray.length;
-    for (int i = 0; i <= length; i++) {
-      LinkedList<Type> element = (LinkedList<Type>) tmpArray[i];
-      if (element != null) {
-        finalList.addAll(element);
+  private static <Type> void fillOrderedArray(ArrayList<?>[] tmpArray, Type[] arrayToSort) {
+    int i = 0;
+    for (Object tmpElement : tmpArray) {
+      if (tmpElement != null) {
+        ArrayList<Type> element = (ArrayList<Type>) tmpElement;
+        int size = element.size();
+        System.arraycopy(element.toArray(), 0, arrayToSort, i, size);
+        i += size;
       }
     }
   }
@@ -83,14 +85,10 @@ public abstract class Pigeonhole {
    * @param arrayToSort Type[]: the array to sort.
    * @param <Type> Type of the array, inferred.
    */
-  public static <Type> void sort(Type[] arrayToSort) {
+  public static <Type> void sort(Type[] arrayToSort) { 
     int max = Pigeonhole.getMax(arrayToSort);
-    LinkedList<?>[] tmpArray = new LinkedList<?>[max + 1];
+    ArrayList<?>[] tmpArray = new ArrayList<?>[max + 1];
     Pigeonhole.fillTmpArray(tmpArray, arrayToSort);
-    int length = arrayToSort.length;
-    ArrayList<Type> finalList = new ArrayList<Type>(length);
-    Pigeonhole.createFinalList(tmpArray, finalList);
-    Type[] finalArray = (Type[]) finalList.toArray();
-    System.arraycopy(finalArray, 0, arrayToSort, 0, length);
+    Pigeonhole.fillOrderedArray(tmpArray, arrayToSort);
   }
 }
