@@ -21,13 +21,16 @@ import java.util.ArrayList;
 
 /**
  * Static class containing sort method using pigeonhole algorithm.
- * @see <a href="https://en.wikipedia.org/wiki/Pigeonhole_sort">Wikipedia page for pigeonhole sort</a>
+ *
  * @author Federico Bertani
+ * @see <a href="https://en.wikipedia.org/wiki/Pigeonhole_sort">Wikipedia page for pigeonhole
+ * sort</a>
  */
 public abstract class Pigeonhole {
 
   /**
    * Get maximum hashCode value of a given generic array
+   *
    * @param array Type[]: the array to calculate the maximum
    * @param <Type> Type of the array, inferred.
    * @return Integer: the maximum hashcode value found in the array
@@ -45,6 +48,7 @@ public abstract class Pigeonhole {
   /**
    * Fill a temporary array at position corresponding to values taken from array to sort.
    * Every position of the array has a linked list for handling multiple equal value.
+   *
    * @param tmpArray LinkedList<Type>[]: the array to fill
    * @param arrayToSort Type[]: the array to sort
    * @param <Type> Type of the array, inferred.
@@ -63,9 +67,9 @@ public abstract class Pigeonhole {
   /**
    * Iterate through an array of list and concat them into the array to sort
    *
-   * @param tmpArray    LinkedList<Type>[]: the array to iterate
+   * @param tmpArray LinkedList<Type>[]: the array to iterate
    * @param arrayToSort ype[]: the array to sort
-   * @param <Type>      Type of the array, inferred.
+   * @param <Type> Type of the array, inferred.
    */
   private static <Type> void fillOrderedArray(ArrayList<?>[] tmpArray, Type[] arrayToSort) {
     int i = 0;
@@ -81,11 +85,13 @@ public abstract class Pigeonhole {
 
   /**
    * Sort given array using pigeonhole sort algorithm.
-   * @see <a href="https://en.wikipedia.org/wiki/Pigeonhole_sort">Wikipedia page for pigeonhole sort</a>
+   *
    * @param arrayToSort Type[]: the array to sort.
    * @param <Type> Type of the array, inferred.
+   * @see <a href="https://en.wikipedia.org/wiki/Pigeonhole_sort">Wikipedia page for pigeonhole
+   * sort</a>
    */
-  public static <Type> void sort(Type[] arrayToSort) { 
+  public static <Type> void sort(Type[] arrayToSort) {
     int max = Pigeonhole.getMax(arrayToSort);
     ArrayList<?>[] tmpArray = new ArrayList<?>[max + 1];
     Pigeonhole.fillTmpArray(tmpArray, arrayToSort);

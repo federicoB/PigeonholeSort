@@ -1,18 +1,25 @@
 package visualization;
 
+import static visualization.ArrayElementBox.boxTotalSize;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Random;
+import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
-import javafx.animation.SequentialTransition;
 import javafx.animation.Transition;
 import javafx.animation.TranslateTransition;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
-
-import java.util.*;
-
-import static visualization.ArrayElementBox.boxTotalSize;
+import javafx.util.Duration;
 
 /**
  * This file is part of PigeonholeSort
@@ -35,6 +42,10 @@ import static visualization.ArrayElementBox.boxTotalSize;
 public class MainController {
 
   /**
+   * global animation durations
+   */
+  public static ObservableValue<Duration> animationsDuration;
+  /**
    * event handler used in onFinished animation event. Used for creating a step-by-step animation.
    */
   private final StepTransitionEventHandler stepTransitionEventHandler = new StepTransitionEventHandler();
@@ -54,6 +65,11 @@ public class MainController {
   @FXML
   private StackPane animationPane;
   /**
+   * Animation speed slider.
+   */
+  @FXML
+  private Slider animationSpeedSlider;
+  /**
    * Maximum value of the generated random array.
    */
   private int max;
@@ -70,9 +86,9 @@ public class MainController {
    */
   private Boolean sortingAnimationPrepared;
   /**
-   * Queue of Transitions composing sort animation. Used for creating a step-by step animation.
+   * Queue of Transitions composing animations. Used for creating a step-by step animation.
    */
-  private Queue<Transition> sortTransition;
+  private Queue<Transition> transitionQueue;
 
   /**
    * Get the desired maximum possible value of the generated array to sort from a TextField.
@@ -114,10 +130,33 @@ public class MainController {
       prepareSortingAnimation();
     }
     //if the queue of animation for the sorting is not empty
-    if (!sortTransition.isEmpty()) {
+    if (!transitionQueue.isEmpty()) {
       //play the animation in the head of the queue and remove it
-      sortTransition.remove().play();
+      playNextAnimation();
     }
+  }
+
+  private void playNextAnimation() {
+    //this ugly code is caused by javafx non permitting to change animation speed
+    // at animation runtime. Also there isn't a unbind method on Transition
+    // because ParallelTransition and SequentialTransition doesn't support it.
+    // It's repeated on every other Transition subclasses.
+    Transition transition = transitionQueue.remove();
+    if (transition instanceof ParallelTransition) {
+      ParallelTransition parallelTransition = (ParallelTransition) transition;
+      TranslateTransition translateTransition = (TranslateTransition) parallelTransition
+          .getChildren().get(0);
+      FadeTransition fadeTransition = (FadeTransition) parallelTransition.getChildren().get(1);
+      translateTransition.durationProperty().unbind();
+      fadeTransition.durationProperty().unbind();
+    } else if (transition instanceof TranslateTransition) {
+      TranslateTransition translateTransition = (TranslateTransition) transition;
+      translateTransition.durationProperty().unbind();
+    } else if (transition instanceof FadeTransition) {
+      FadeTransition fadeTransition = (FadeTransition) transition;
+      fadeTransition.durationProperty().unbind();
+    }
+    transition.play();
   }
 
   /**
@@ -126,8 +165,6 @@ public class MainController {
    */
   @FXML
   private void onGenerateArrayButtonClick() {
-    //create a new sequential transition
-    SequentialTransition generationTransition = new SequentialTransition();
     //get array length requested from user
     int length = getArrayLength();
     //get maximum random value requested from user
@@ -158,12 +195,12 @@ public class MainController {
       //add the arrayElement box to the list of array boxes.
       arrayBoxesToSort.add(arrayElementBox);
       //add the fade transition to the total sequential transition
-      generationTransition.getChildren().add(arrayElementBox.getCreationFadeTransition());
+      transitionQueue.add(arrayElementBox.getCreationFadeTransition(stepTransitionEventHandler));
       //add the array box to the scene
       animationPane.getChildren().add(arrayElementBox);
     }
-    //start the sequential transition representing the random array generation
-    generationTransition.play();
+    //play the first animation on the animation queue
+    playNextAnimation();
     sortingAnimationPrepared = false;
   }
 
@@ -172,7 +209,6 @@ public class MainController {
    * Create the three main animation for the sorting phase.
    */
   private void prepareSortingAnimation() {
-    sortTransition = new LinkedList<>();
     //set a new width for the animation pane only if the new width is grater than the previous
     if ((max + 1) * boxTotalSize > animationPane.getPrefWidth()) {
       //set a new width equal to the maximum value in the array multiplied by the a box size
@@ -193,10 +229,11 @@ public class MainController {
   /**
    * Create a temporary array with fade animation.
    *
-   * @param tmpArrayVisualization Map<Integer, ElementOfTemporaryArray>:
-   *                              map between array to sort values and elements with those values
+   * @param tmpArrayVisualization Map<Integer, ElementOfTemporaryArray>: map between array to sort
+   * values and elements with those values
    */
-  private void initializeTemporaryArray(Map<Integer, ElementOfTemporaryArray> tmpArrayVisualization) {
+  private void initializeTemporaryArray(
+      Map<Integer, ElementOfTemporaryArray> tmpArrayVisualization) {
     //for a number of times equal to the maximum value of the array to sort
     for (int i = 0; i <= max; i++) {
       //create empty rectangle + structure for handling array elements
@@ -205,7 +242,8 @@ public class MainController {
       tmpArrayVisualization.put(i, elementOfTemporaryArray);
       //add the fade animation to the total sort transition
       //pass as parameter also an event handler for step-by-step animation
-      sortTransition.add(elementOfTemporaryArray.getCreationFadeTransition(stepTransitionEventHandler));
+      transitionQueue
+          .add(elementOfTemporaryArray.getCreationFadeTransition(stepTransitionEventHandler));
       //add the element to the animation pane
       animationPane.getChildren().add(elementOfTemporaryArray);
     }
@@ -214,10 +252,11 @@ public class MainController {
   /**
    * Creates the animation for translating each array box from the array to sort to the tmp array.
    *
-   * @param tmpArrayVisualization Map<Integer, ElementOfTemporaryArray>:
-   *                              map between array to sort values and elements with those values
+   * @param tmpArrayVisualization Map<Integer, ElementOfTemporaryArray>: map between array to sort
+   * values and elements with those values
    */
-  private void createFillTempArrayAnimation(Map<Integer, ElementOfTemporaryArray> tmpArrayVisualization) {
+  private void createFillTempArrayAnimation(
+      Map<Integer, ElementOfTemporaryArray> tmpArrayVisualization) {
     //for each element of the array to sort
     for (ArrayElementBox arrayToSortElement : arrayBoxesToSort) {
       //get the element value
@@ -228,22 +267,24 @@ public class MainController {
       ElementOfTemporaryArray elementOfTemporaryArray = tmpArrayVisualization.get(number);
       //add a the cloned element to the ElementOfTemporaryArray list. save the TranslateTransition generated.
       //pass as parameter also an event handler for step-by-step animation
-      TranslateTransition translateTransition = elementOfTemporaryArray.add(clonedElement, stepTransitionEventHandler);
+      TranslateTransition translateTransition = elementOfTemporaryArray
+          .add(clonedElement, stepTransitionEventHandler);
       //add the translate transition to the total sort transition
-      sortTransition.add(translateTransition);
+      transitionQueue.add(translateTransition);
       //add the cloned element to the scene
       animationPane.getChildren().add(clonedElement);
     }
   }
 
   /**
-   * Create animation for the last animation phase where elements are moved from the temporary array to the
-   * initial array in a sorted order.
+   * Create animation for the last animation phase where elements are moved from the temporary array
+   * to the initial array in a sorted order.
    *
-   * @param tmpArrayVisualization Map<Integer, ElementOfTemporaryArray>:
-   *                              map between array to sort values and elements with those values
+   * @param tmpArrayVisualization Map<Integer, ElementOfTemporaryArray>: map between array to sort
+   * values and elements with those values
    */
-  private void createLastAnimationPhase(Map<Integer, ElementOfTemporaryArray> tmpArrayVisualization) {
+  private void createLastAnimationPhase(
+      Map<Integer, ElementOfTemporaryArray> tmpArrayVisualization) {
     //declare a counter for keep count of elements of the array to sort already sorted
     int arrayOffset = 0;
     //for each element of the temporary array
@@ -257,9 +298,10 @@ public class MainController {
         //parallel transition (fade+translate) generated from moving back the elements from tmp array to original array
         //pass as parameter also an event handler for step-by-step animation
         parallelTransition =
-                elementOfTemporaryArray.getMoveBackAnimation(arrayBoxesToSort, arrayOffset, stepTransitionEventHandler);
+            elementOfTemporaryArray
+                .getMoveBackAnimation(arrayBoxesToSort, arrayOffset, stepTransitionEventHandler);
         //add the parallel transition to the total sort animation
-        sortTransition.add(parallelTransition);
+        transitionQueue.add(parallelTransition);
         //increase the array offset by a value equal to the number of elements moved back
         arrayOffset += listLength;
       }
@@ -280,9 +322,9 @@ public class MainController {
       prepareSortingAnimation();
     }
     //if the queue of sort animation is not empty
-    if (!sortTransition.isEmpty()) {
+    if (!transitionQueue.isEmpty()) {
       //remove and animation from the queue and play it
-      sortTransition.remove().play();
+      playNextAnimation();
     }
   }
 
@@ -295,7 +337,10 @@ public class MainController {
     stepByStep = false;
     //set the sorting animation as not prepared
     sortingAnimationPrepared = false;
+    transitionQueue = new LinkedList<>();
+    animationsDuration = new AnimationSpeed(animationSpeedSlider.valueProperty());
   }
+
 
   /**
    * Event handler for terminating an animation.
@@ -305,9 +350,9 @@ public class MainController {
     @Override
     public void handle(ActionEvent event) {
       //if the queue is not empty and the user didn't request a step by step transition
-      if (!sortTransition.isEmpty() && !stepByStep) {
+      if (!transitionQueue.isEmpty() && !stepByStep) {
         //remove last animation and play it
-        sortTransition.remove().play();
+        playNextAnimation();
       }
     }
   }

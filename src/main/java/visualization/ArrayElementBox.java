@@ -1,14 +1,12 @@
 package visualization;
 
+import java.io.IOException;
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-
-import java.io.IOException;
-
 
 /**
  * This file is part of PigeonholeSort
@@ -61,11 +59,7 @@ public class ArrayElementBox extends StackPane implements Cloneable {
    * @param number int: the number that will be show inside the rectangle.
    */
   public ArrayElementBox(int number) {
-    //load fxml representing the object
-    loadFXML();
-    //set the text given to the number
-    this.number.setText(String.valueOf(number));
-
+    this(String.valueOf(number));
   }
 
   /**
@@ -78,6 +72,8 @@ public class ArrayElementBox extends StackPane implements Cloneable {
     loadFXML();
     //set the text given to the number
     this.number.setText(text);
+    //set initial opacity of the element to 0%. The opacity will be increased with a fade in animation.
+    this.setOpacity(0);
   }
 
   protected void loadFXML() {
@@ -98,15 +94,22 @@ public class ArrayElementBox extends StackPane implements Cloneable {
   /**
    * Create a new fade transition for representing the appearance of the array box in the scene
    *
+   * @param stepTransitionEventHandler MainController.StepTransitionEventHandler: a handler for
+   * onFinished transition event.
    * @return FadeTransition: the fade transition from 0 to 100 opacity of the array box
    */
-  public FadeTransition getCreationFadeTransition() {
+  public FadeTransition getCreationFadeTransition(
+      MainController.StepTransitionEventHandler stepTransitionEventHandler) {
     //create a new fade transition for the appearance of the new array box in the scene
     FadeTransition fadeTransition = new FadeTransition(Duration.millis(100), this);
     //the fade transition will be from 0% opacity
     fadeTransition.setFromValue(0);
     //to 100% opacity value
     fadeTransition.setToValue(100);
+    //set the on finished event handler
+    fadeTransition.setOnFinished(stepTransitionEventHandler);
+    //bind the animation duration to the main duration property
+    fadeTransition.durationProperty().bind(MainController.animationsDuration);
     //return the just created fade transition
     return fadeTransition;
   }
@@ -118,6 +121,8 @@ public class ArrayElementBox extends StackPane implements Cloneable {
     fadeTransition.setFromValue(100);
     //set final value of fade transition
     fadeTransition.setToValue(0);
+    //bind the animation duration to the main duration property
+    fadeTransition.durationProperty().bind(MainController.animationsDuration);
     //return the just created fade transition
     return fadeTransition;
   }
@@ -140,6 +145,7 @@ public class ArrayElementBox extends StackPane implements Cloneable {
   public ArrayElementBox clone() {
     //create a new array element box with the same number of the current
     ArrayElementBox arrayElementBox = new ArrayElementBox(this.number.getText());
+    arrayElementBox.setOpacity(100);
     //clone the x position property
     arrayElementBox.setTranslateX(this.getTranslateX());
     //clone the y position property

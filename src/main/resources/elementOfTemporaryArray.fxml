@@ -3,10 +3,10 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Text?>
-<fx:root xmlns:fx="http://javafx.com/fxml" type="javafx.scene.layout.StackPane"
-         xmlns="http://javafx.com/javafx"
-         maxHeight="40.0" maxWidth="40.0">
-    <Rectangle width="40" height="40" fill="#ffffff" stroke="black"/>
-    <Text fx:id="number" fill="black"/>
+<fx:root xmlns:fx="http://javafx.com/fxml" maxHeight="40.0"
+  maxWidth="40.0"
+  type="javafx.scene.layout.StackPane" xmlns="http://javafx.com/javafx">
+  <Rectangle fill="#ffffff" height="40" stroke="black" width="40"/>
+  <Text fill="black" fx:id="number"/>
 
 </fx:root>

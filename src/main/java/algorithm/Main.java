@@ -23,6 +23,7 @@ import java.util.Random;
 /**
  * Entry point class.
  * Used for profiling purposes
+ *
  * @author Federico Bertani
  */
 public class Main {

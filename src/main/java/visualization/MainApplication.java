@@ -17,13 +17,12 @@ package visualization; /**
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
-
-import java.io.IOException;
 
 /**
  * Project main application. TabPane layout.
