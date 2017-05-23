@@ -1,4 +1,4 @@
-/**
+package algorithm; /**
  * This file is part of PigeonholeSort
  * <p>
  * Created by Federico Bertani on 07/05/17.

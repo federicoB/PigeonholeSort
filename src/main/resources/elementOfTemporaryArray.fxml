@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Text?>
+<fx:root xmlns:fx="http://javafx.com/fxml" type="javafx.scene.layout.StackPane"
+         xmlns="http://javafx.com/javafx"
+         maxHeight="40.0" maxWidth="40.0">
+    <Rectangle width="40" height="40" fill="#ffffff" stroke="black"/>
+    <Text fx:id="number" fill="black"/>
+
+</fx:root>

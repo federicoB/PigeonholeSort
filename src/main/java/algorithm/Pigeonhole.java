@@ -1,4 +1,4 @@
-/**
+package algorithm; /**
  * This file is part of PigeonholeSort
  * <p>
  * Created by Federico Bertani on 06/05/17.
@@ -30,7 +30,7 @@ public abstract class Pigeonhole {
    * Get maximum hashCode value of a given generic array
    * @param array Type[]: the array to calculate the maximum
    * @param <Type> Type of the array, inferred.
-   * @return
+   * @return Integer: the maximum hashcode value found in the array
    */
   private static <Type> Integer getMax(Type[] array) {
     int max = 0;
