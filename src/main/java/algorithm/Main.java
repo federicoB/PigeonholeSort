@@ -32,7 +32,7 @@ public class Main {
 
   public static void main(String[] args) {
     array = initializeArray();
-    Pigeonhole.sort(array);
+    PigeonholeSort.sort(array);
     array = initializeArray();
     Arrays.sort(array);
   }

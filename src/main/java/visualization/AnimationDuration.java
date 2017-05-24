@@ -26,13 +26,25 @@ import javafx.util.Duration;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class AnimationSpeed implements ObservableValue<Duration> {
 
-  DoubleProperty sliderValue;
-  Map<ChangeListener<? super javafx.util.Duration>, ChangeListener<Number>> changeListeners;
+/**
+ * This class represent the global value of animation duration.
+ * It's an Observable value, so animations duration can be bound to it.
+ * Internally it's an adapter from a ObservableValue of Double to an
+ * ObservableValue of {@link Duration}.
+ */
+public class AnimationDuration implements ObservableValue<Duration> {
 
-  public AnimationSpeed(DoubleProperty sliderValue) {
-    this.sliderValue = sliderValue;
+  private DoubleProperty milliseconds;
+  private Map<ChangeListener<? super javafx.util.Duration>, ChangeListener<Number>> changeListeners;
+
+  /**
+   * Create a new AnimationDuration with the {@link DoubleProperty} given
+   * @param milliseconds {@link DoubleProperty}: a double property
+   * representing the duration in milliseconds
+   */
+  public AnimationDuration(DoubleProperty milliseconds) {
+    this.milliseconds = milliseconds;
     changeListeners = new HashMap<>();
   }
 
@@ -48,29 +60,29 @@ public class AnimationSpeed implements ObservableValue<Duration> {
   public void addListener(ChangeListener<? super javafx.util.Duration> listener) {
     ChangeListener<Number> numberChangeListener = convertDurationLister(listener);
     changeListeners.put(listener, numberChangeListener);
-    sliderValue.addListener(numberChangeListener);
+    milliseconds.addListener(numberChangeListener);
   }
 
   @Override
   public void removeListener(ChangeListener<? super javafx.util.Duration> listener) {
     if (changeListeners.containsKey(listener)) {
-      sliderValue.removeListener(changeListeners.get(listener));
+      milliseconds.removeListener(changeListeners.get(listener));
     }
   }
 
   @Override
   public javafx.util.Duration getValue() {
-    return javafx.util.Duration.millis(sliderValue.getValue());
+    return javafx.util.Duration.millis(milliseconds.getValue());
   }
 
   @Override
   public void addListener(InvalidationListener listener) {
-    sliderValue.addListener(listener);
+    milliseconds.addListener(listener);
   }
 
   @Override
   public void removeListener(InvalidationListener listener) {
-    sliderValue.removeListener(listener);
+    milliseconds.removeListener(listener);
   }
 }
 

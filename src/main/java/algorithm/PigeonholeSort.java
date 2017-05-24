@@ -26,7 +26,7 @@ import java.util.ArrayList;
  * @see <a href="https://en.wikipedia.org/wiki/Pigeonhole_sort">Wikipedia page for pigeonhole
  * sort</a>
  */
-public abstract class Pigeonhole {
+public abstract class PigeonholeSort {
 
   /**
    * Get maximum hashCode value of a given generic array
@@ -92,9 +92,9 @@ public abstract class Pigeonhole {
    * sort</a>
    */
   public static <Type> void sort(Type[] arrayToSort) {
-    int max = Pigeonhole.getMax(arrayToSort);
+    int max = PigeonholeSort.getMax(arrayToSort);
     ArrayList<?>[] tmpArray = new ArrayList<?>[max + 1];
-    Pigeonhole.fillTmpArray(tmpArray, arrayToSort);
-    Pigeonhole.fillOrderedArray(tmpArray, arrayToSort);
+    PigeonholeSort.fillTmpArray(tmpArray, arrayToSort);
+    PigeonholeSort.fillOrderedArray(tmpArray, arrayToSort);
   }
 }

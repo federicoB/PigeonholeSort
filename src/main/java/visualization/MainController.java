@@ -19,7 +19,6 @@ import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.Transition;
 import javafx.animation.TranslateTransition;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -33,7 +32,6 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Window;
-import javafx.util.Duration;
 
 /**
  * This file is part of PigeonholeSort
@@ -56,74 +54,81 @@ import javafx.util.Duration;
 public class MainController {
 
   /**
-   * global animation durations
+   * Global animation durations
    */
-  public static ObservableValue<Duration> animationsDuration;
+  public static AnimationDuration animationsDuration;
+
   /**
    * event handler used in onFinished animation event. Used for creating a step-by-step animation.
    */
   private final StepTransitionEventHandler stepTransitionEventHandler = new StepTransitionEventHandler();
-  /**
-   * TextField containing the maximum length of the array to sort.
-   */
 
+  /**
+   * StackPane where all the animation are played
+   */
   @FXML
   private StackPane animationPane;
+
   /**
    * Animation speed slider.
    */
   @FXML
   private Slider animationSpeedSlider;
+
   /**
    * Maximum value of the generated random array.
    */
   private int max;
+
   /**
    * list of ArrayElementBox representing the array to sort.
    */
   private ArrayList<ArrayElementBox> arrayBoxesToSort;
+
   /**
    * Flag for know if the user requested a stepByStep animation.
    */
   private Boolean stepByStep;
+
   /**
    * Flag for know if the sorting animation is already prepared.
    */
   private Boolean sortingAnimationPrepared;
+
   /**
    * Queue of Transitions composing animations. Used for creating a step-by step animation.
    */
   private Queue<Transition> transitionQueue;
 
+  /**
+   * Button for step-by-step animation
+   */
   @FXML
   private Button stepButton;
 
+  /**
+   * Button for all at once animation
+   */
   @FXML
   private Button sortButton;
 
   /**
-   * Get the desired maximum possible value of the generated array to sort from a TextField.
+   * Get the desired maximum possible value of the generated array to sort from a dialog.
    *
    * @return int: the desired maximum possible value
    */
   private int getMaxRandomValue() {
-    //get maxValue from TextField
-
+    //Create a textinput dialog with default value 10
     TextInputDialog dialog = new TextInputDialog("10");
     dialog.setTitle("Max random value input");
     dialog.setHeaderText("Insert the maximum possible value");
-
-    // Traditional way to get the response value.
     Optional<String> result = dialog.showAndWait();
     int maxValue;
     try {
       maxValue = result.map(Integer::parseInt).orElse(10);
     } catch (NumberFormatException ex) {
-      Alert alert = new Alert(AlertType.ERROR);
-      alert.setTitle("Error");
-      alert.setHeaderText("Error parsing input as integer. Setting default value 10");
-      alert.showAndWait();
-      return 10;
+      showErrorMessage("Error parsing input as integer. Setting default value 10");
+      maxValue = 10;
     }
     //return the maxValue
     return maxValue;
@@ -135,25 +140,26 @@ public class MainController {
    * @return int: the desired length of generated array
    */
   private int getArrayLength() {
-    //get arrayToSort length from TextField
     TextInputDialog dialog = new TextInputDialog("10");
     dialog.setTitle("Array length insert");
     dialog.setHeaderText("Insert the length of the array");
-
-    // Traditional way to get the response value.
     Optional<String> result = dialog.showAndWait();
     int length;
     try {
-    length = result.map(Integer::parseInt).orElse(10);
+      length = result.map(Integer::parseInt).orElse(10);
     } catch (NumberFormatException ex) {
-      Alert alert = new Alert(AlertType.ERROR);
-      alert.setTitle("Error");
-      alert.setHeaderText("Error parsing input as integer. Setting default value 10");
-      alert.showAndWait();
-      return 10;
+      showErrorMessage("Error parsing input as integer. Setting default value 10");
+      length = 10;
     }
     //return the length
     return length;
+  }
+
+  private void showErrorMessage(String string) {
+    Alert alert = new Alert(AlertType.ERROR);
+    alert.setTitle("Error");
+    alert.setHeaderText(string);
+    alert.showAndWait();
   }
 
   /**
@@ -187,9 +193,9 @@ public class MainController {
         ParallelTransition parallelTransition = (ParallelTransition) transition;
         parallelTransition.getChildren().forEach(this::unbindAnimation);
       } else if (transition instanceof TranslateTransition) {
-        unbindAnimation((TranslateTransition)transition);
+        unbindAnimation((TranslateTransition) transition);
       } else if (transition instanceof FadeTransition) {
-        unbindAnimation((FadeTransition)transition);
+        unbindAnimation((FadeTransition) transition);
       }
       transition.play();
     }
@@ -197,9 +203,9 @@ public class MainController {
 
   private void unbindAnimation(Animation animation) {
     if (animation instanceof TranslateTransition) {
-      unbindAnimation((TranslateTransition)animation);
+      unbindAnimation((TranslateTransition) animation);
     } else {
-      unbindAnimation((FadeTransition)animation);
+      unbindAnimation((FadeTransition) animation);
     }
   }
 
@@ -211,7 +217,7 @@ public class MainController {
     fadeTransition.durationProperty().unbind();
   }
 
-  private void addNumberToArray(int number,int position) {
+  private void addNumberToArray(int number, int position) {
     //if the new number is greater than the max counter
     if (number > max) {
       //update the max counter
@@ -264,9 +270,9 @@ public class MainController {
     for (i = 0; i < length; i++) {
       //generate a random number between 0 and randomMaxValue
       int number = generator.nextInt(randomMaxValue);
-      addNumberToArray(number,i);
+      addNumberToArray(number, i);
     }
-    if (i>0) {
+    if (i > 0) {
       sortButton.setDisable(false);
       stepButton.setDisable(false);
       sortButton.requestFocus();
@@ -279,30 +285,28 @@ public class MainController {
   private void onUserInputButtonClick() {
     initializeAnimationArea();
     boolean userTerminatedInput = false;
-    int position=0;
+    int position = 0;
     do {
       TextInputDialog dialog = new TextInputDialog("42");
       dialog.setTitle("Array values input");
       dialog.setHeaderText("Insert a value into the array. Press cancel for terminate");
-
-      // Traditional way to get the response value.
       Optional<String> result = dialog.showAndWait();
       int value;
       if (result.isPresent()) {
         value = Integer.parseInt(result.get());
-        addNumberToArray(value,position);
+        addNumberToArray(value, position);
         position++;
         //play the first animation on the animation queue
         playNextAnimation();
       } else {
         userTerminatedInput = true;
-        if (position>0) {
+        if (position > 0) {
           sortButton.setDisable(false);
           stepButton.setDisable(false);
           sortButton.requestFocus();
         }
       }
-      } while (!userTerminatedInput);
+    } while (!userTerminatedInput);
   }
 
 
@@ -315,17 +319,17 @@ public class MainController {
     Node source = (Node) ae.getSource();
     Window theStage = source.getScene().getWindow();
     File selectedFile = fileChooser.showOpenDialog(theStage);
-    if (selectedFile!=null) {
+    if (selectedFile != null) {
       Charset charset = Charset.defaultCharset();
       String line = null;
       try (BufferedReader reader = Files.newBufferedReader(selectedFile.toPath(), charset)) {
-        int numberOfElementsRead=0;
+        int numberOfElementsRead = 0;
         while ((line = reader.readLine()) != null) {
           int number = Integer.parseInt(line);
-          addNumberToArray(number,numberOfElementsRead);
+          addNumberToArray(number, numberOfElementsRead);
           numberOfElementsRead++;
         }
-        if (numberOfElementsRead>0) {
+        if (numberOfElementsRead > 0) {
           sortButton.setDisable(false);
           stepButton.setDisable(false);
           sortButton.requestFocus();
@@ -333,17 +337,10 @@ public class MainController {
           playNextAnimation();
         }
       } catch (IOException x) {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText("Error opening the file");
-        alert.showAndWait();
+        showErrorMessage("Error opening the file");
       } catch (NumberFormatException x) {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText("Error parsing the file");
-        alert.setContentText("Cannot parse "+line+" to a number.");
         initializeAnimationArea();
-        alert.showAndWait();
+        showErrorMessage("Cannot parse " + line + " to a number.");
       }
     }
   }
@@ -357,25 +354,25 @@ public class MainController {
       //set a new width equal to the maximum value in the array multiplied by the a box size
       animationPane.setPrefWidth((max + 1) * boxTotalSize);
     }
-    //create a new hash map for representing temporary array. The keys are Integer and they will be from 0 to max.
-    Map<Integer, PigeonHole> tmpArrayVisualization = new HashMap<>(max);
-    //create animations for appearance temporary array
-    initializeTemporaryArray(tmpArrayVisualization);
-    //creates animations for moving array elements from the array to sort to the temporary array
-    createFillTempArrayAnimation(tmpArrayVisualization);
-    //create animations for moving back array elements from the temporary array to the array to sort, in a sorted way.
-    createLastAnimationPhase(tmpArrayVisualization);
+    //create a new hash map for representing pigeonholes. The keys are Integer and they will be from 0 to max.
+    Map<Integer, PigeonHole> pigeonHoles = new HashMap<>(max);
+    //create animations for pigeonholes appearance
+    initializePigeonHoles(pigeonHoles);
+    //creates animations for moving array elements from the array to sort to the pigeonholes
+    createFillPigeonholesAnimation(pigeonHoles);
+    //create animations for moving back array elements from the pigeonholes to the array to sort, in a sorted way.
+    createLastAnimationPhase(pigeonHoles);
     //set the flag for know if the sorting animation has been prepared to true
     sortingAnimationPrepared = true;
   }
 
   /**
-   * Create a temporary array with fade animation.
+   * Create pigeonholes with fade animation.
    *
-   * @param tmpArrayVisualization Map<Integer, PigeonHole>: map between array to sort
-   * values and elements with those values
+   * @param tmpArrayVisualization Map<Integer, PigeonHole>: map between array to sort values and
+   * elements with those values
    */
-  private void initializeTemporaryArray(
+  private void initializePigeonHoles(
       Map<Integer, PigeonHole> tmpArrayVisualization) {
     //for a number of times equal to the maximum value of the array to sort
     for (int i = 0; i <= max; i++) {
@@ -395,10 +392,10 @@ public class MainController {
   /**
    * Creates the animation for translating each array box from the array to sort to the tmp array.
    *
-   * @param tmpArrayVisualization Map<Integer, PigeonHole>: map between array to sort
-   * values and elements with those values
+   * @param tmpArrayVisualization Map<Integer, PigeonHole>: map between array to sort values and
+   * elements with those values
    */
-  private void createFillTempArrayAnimation(
+  private void createFillPigeonholesAnimation(
       Map<Integer, PigeonHole> tmpArrayVisualization) {
     //for each element of the array to sort
     for (ArrayElementBox arrayToSortElement : arrayBoxesToSort) {
@@ -420,19 +417,19 @@ public class MainController {
   }
 
   /**
-   * Create animation for the last animation phase where elements are moved from the temporary array
+   * Create animation for the last animation phase where elements are moved from the pigeonholes
    * to the initial array in a sorted order.
    *
-   * @param tmpArrayVisualization Map<Integer, PigeonHole>: map between array to sort
-   * values and elements with those values
+   * @param tmpArrayVisualization Map<Integer, PigeonHole>: map between array to sort values and
+   * elements with those values
    */
   private void createLastAnimationPhase(
       Map<Integer, PigeonHole> tmpArrayVisualization) {
     //declare a counter for keep count of elements of the array to sort already sorted
     int arrayOffset = 0;
-    //for each element of the temporary array
+    //for pigeonhole in the pigeonholes
     for (PigeonHole pigeonHole : tmpArrayVisualization.values()) {
-      //get the number of elements in the list of the temporary array element
+      //get the number of elements in the list of the pigeonholes element
       int listLength = pigeonHole.getListSize();
       //if the list in not empty (this if is for performance reason)
       if (listLength > 0) {
@@ -476,9 +473,11 @@ public class MainController {
    */
   @FXML
   public void initialize() {
+    //initialize the transition queue to a new LinkedList
     transitionQueue = new LinkedList<>();
     sortingAnimationPrepared = false;
-    animationsDuration = new AnimationSpeed(animationSpeedSlider.valueProperty());
+    //create a new AnimationDuration with bind at value property of the slider
+    animationsDuration = new AnimationDuration(animationSpeedSlider.valueProperty());
   }
 
 

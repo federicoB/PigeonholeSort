@@ -91,7 +91,7 @@ public class PigeonHole extends ArrayElementBox {
    *
    * @param arrayBoxesToSort List<ArrayElementBox>: list of graphics representation of array element
    * to sort
-   * @param arrayToSortOffset int: index of the array where the elements of this tempArrayElement
+   * @param arrayToSortOffset int: index of the array where the elements of this {@link PigeonHole}
    * will be copied
    * @param stepTransitionEventHandler MainController.StepTransitionEventHandler: a handler for
    * OnFinished transition event
@@ -147,7 +147,7 @@ public class PigeonHole extends ArrayElementBox {
    */
   protected void loadFXML() {
     //create a new fxml loader for loading the fxml from file
-    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/elementOfTemporaryArray.fxml"));
+    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/pigeon.fxml"));
     //set the root element as this object
     fxmlLoader.setRoot(this);
     //set the controller as this object

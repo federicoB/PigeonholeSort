@@ -17,20 +17,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import static org.junit.Assert.assertTrue;
+
 import algorithm.Main;
-import algorithm.Pigeonhole;
+import algorithm.PigeonholeSort;
+import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Arrays;
-
-import static org.junit.Assert.assertTrue;
 
 /**
  * Unit testing for PigeonHole sort class
  * @author Federico Bertani
  */
-public class PigeonholeTest {
+public class PigeonholeSortTest {
 
   private Integer[] array;
 
@@ -45,7 +44,7 @@ public class PigeonholeTest {
    */
   @Test
   public void pigeonHoleSort() throws Exception {
-    Pigeonhole.sort(array);
+    PigeonholeSort.sort(array);
   }
 
   /**
@@ -72,7 +71,7 @@ public class PigeonholeTest {
    */
   @Test
   public void isPigeonSortValid() throws Exception {
-    Pigeonhole.sort(array);
+    PigeonholeSort.sort(array);
     int length = array.length;
     for (int i = 0; i < length - 1; i++) {
       assertTrue(array[i] <= array[i + 1]);
