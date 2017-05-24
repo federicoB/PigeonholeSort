@@ -1,0 +1,20 @@
+.button-raised{
+    -fx-padding: 0.6em 0.53em;
+    -fx-font-size: 12px;
+    -jfx-button-type: RAISED;
+    -fx-background-color: rgb(77,102,204);
+    -fx-pref-width: 150;
+    -fx-text-fill: WHITE;
+}
+
+.jfx-slider .thumb{
+  -fx-background-color:rgb(77,102,204);
+}
+
+.jfx-tab-pane .tab-header-area .headers-region .tab-selected-line {
+    -fx-stroke: rgb(77,102,204);
+}
+
+.jfx-tab-pane .tab-header-area .jfx-rippler{
+  -jfx-rippler-fill: rgb(77,102,204);
+}

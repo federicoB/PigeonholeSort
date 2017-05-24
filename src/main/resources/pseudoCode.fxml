@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.text.Font?>
+<Label maxWidth="600" prefHeight="500" text="
+void pigeonHoleSort(Item[] A)   &#13;
+  int max = max(A)  &#13;
+  C = List&lt;Item&gt;[0..max]  &#13;
+  for i=0 to A.length   &#13;
+      C[A[i]].add(A[i]) &#13;
+      int j=0 &#13;
+      for i=0 to C.length &#13;
+           for k=0 to C[i].length &#13;
+                C[j]=C[i][k] &#13;
+                j++ &#13;
+" xmlns="http://javafx.com/javafx/8.0.131" xmlns:fx="http://javafx.com/fxml/1">
+   <font>
+      <Font size="25.0" />
+   </font>
+</Label>

@@ -32,11 +32,11 @@ import javafx.util.Duration;
 /**
  * This class represent and element of the temporary array used for pigeonhole sorting. It's an
  * array of lists. The list contains elements of equal value of the array to sort. When and {@link
- * ElementOfTemporaryArray} is created it's only a {@link StackPane} with a {@link
+ * PigeonHole} is created it's only a {@link StackPane} with a {@link
  * javafx.scene.shape.Rectangle} and {@link javafx.scene.text.Text}. When a {@link ArrayElementBox}
  * is added it's moved under the already existent ones. Appropriates animations are provided.
  */
-public class ElementOfTemporaryArray extends ArrayElementBox {
+public class PigeonHole extends ArrayElementBox {
 
   /**
    * List of {@link ArrayElementBox} associated to this position of temporary array
@@ -49,7 +49,7 @@ public class ElementOfTemporaryArray extends ArrayElementBox {
    * @param number int: the number show in the center of the rectangle. It's reflect the array
    * position of this element.
    */
-  public ElementOfTemporaryArray(int number) {
+  public PigeonHole(int number) {
     super(number);
     //translate the box vertically
     this.setTranslateY(ArrayElementBox.boxTotalSize * 2);
@@ -60,7 +60,7 @@ public class ElementOfTemporaryArray extends ArrayElementBox {
   }
 
   /**
-   * Add a new {@link ArrayElementBox} to the {@link ElementOfTemporaryArray}
+   * Add a new {@link ArrayElementBox} to the {@link PigeonHole}
    *
    * @param arrayElementBox {@link ArrayElementBox}: the array box to add
    * @param stepTransitionEventHandler MainController.StepTransitionEventHandler: a handler for
@@ -75,10 +75,10 @@ public class ElementOfTemporaryArray extends ArrayElementBox {
         arrayElementBox);
     //bind the animation duration to the main duration property
     translateTransition.durationProperty().bind(MainController.animationsDuration);
-    //set the final X position as the X position of the current ElementOfTemporaryArray
+    //set the final X position as the X position of the current PigeonHole
     translateTransition.setToX(this.getTranslateX());
-    //set the final Y position as the Y position of the current ElementOfTemporaryArray plus a value proportional
-    // to the number of element in the ElementOfTemporaryArray
+    //set the final Y position as the Y position of the current PigeonHole plus a value proportional
+    // to the number of element in the PigeonHole
     translateTransition.setToY(this.getTranslateY() + (50 * this.listOfArrayBoxes.size()));
     //set the OnFinished event handler
     translateTransition.setOnFinished(stepTransitionEventHandler);
@@ -87,7 +87,7 @@ public class ElementOfTemporaryArray extends ArrayElementBox {
   }
 
   /**
-   * Create the move back animation from the {@link ElementOfTemporaryArray} to the array to sort.
+   * Create the move back animation from the {@link PigeonHole} to the array to sort.
    *
    * @param arrayBoxesToSort List<ArrayElementBox>: list of graphics representation of array element
    * to sort
