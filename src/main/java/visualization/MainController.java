@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.Random;
+import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.Transition;
@@ -160,22 +161,32 @@ public class MainController {
     // It's repeated on every other Transition subclasses.
     if (!transitionQueue.isEmpty()) {
       Transition transition = transitionQueue.remove();
+      transition.play();
       if (transition instanceof ParallelTransition) {
         ParallelTransition parallelTransition = (ParallelTransition) transition;
-        TranslateTransition translateTransition = (TranslateTransition) parallelTransition
-            .getChildren().get(0);
-        FadeTransition fadeTransition = (FadeTransition) parallelTransition.getChildren().get(1);
-        translateTransition.durationProperty().unbind();
-        fadeTransition.durationProperty().unbind();
+        parallelTransition.getChildren().forEach(this::unbindAnimation);
       } else if (transition instanceof TranslateTransition) {
-        TranslateTransition translateTransition = (TranslateTransition) transition;
-        translateTransition.durationProperty().unbind();
+        unbindAnimation((TranslateTransition)transition);
       } else if (transition instanceof FadeTransition) {
-        FadeTransition fadeTransition = (FadeTransition) transition;
-        fadeTransition.durationProperty().unbind();
+        unbindAnimation((FadeTransition)transition);
       }
-      transition.play();
     }
+  }
+
+  private void unbindAnimation(Animation animation) {
+    if (animation instanceof TranslateTransition) {
+      unbindAnimation((TranslateTransition)animation);
+    } else {
+      unbindAnimation((FadeTransition)animation);
+    }
+  }
+
+  private void unbindAnimation(TranslateTransition translateTransition) {
+    translateTransition.durationProperty().unbind();
+  }
+
+  private void unbindAnimation(FadeTransition fadeTransition) {
+    fadeTransition.durationProperty().unbind();
   }
 
   private void addNumberToArray(int number,int position) {
@@ -428,6 +439,7 @@ public class MainController {
   @FXML
   public void initialize() {
     transitionQueue = new LinkedList<>();
+    sortingAnimationPrepared = false;
     animationsDuration = new AnimationSpeed(animationSpeedSlider.valueProperty());
   }
 
