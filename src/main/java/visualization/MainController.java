@@ -2,10 +2,16 @@ package visualization;
 
 import static visualization.ArrayElementBox.boxTotalSize;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.Random;
 import javafx.animation.FadeTransition;
@@ -16,9 +22,15 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.StackPane;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Window;
 import javafx.util.Duration;
 
 /**
@@ -52,16 +64,7 @@ public class MainController {
   /**
    * TextField containing the maximum length of the array to sort.
    */
-  @FXML
-  private TextField textFieldArrayLength;
-  /**
-   * TextField containing the maximum possible value of the generated array to sort.
-   */
-  @FXML
-  private TextField textFieldMaxRandomValue;
-  /**
-   * StackPane where generation and sorting animation will be played.
-   */
+
   @FXML
   private StackPane animationPane;
   /**
@@ -98,20 +101,34 @@ public class MainController {
   private int getMaxRandomValue() {
     //get maxValue from TextField
     //TODO check if the maxValue is a correct value
-    int maxValue = Integer.parseInt(textFieldMaxRandomValue.getText());
+    TextInputDialog dialog = new TextInputDialog("10");
+    dialog.setTitle("Max random value input");
+    dialog.setHeaderText("Insert the maximum possible value");
+
+    // Traditional way to get the response value.
+    Optional<String> result = dialog.showAndWait();
+    int maxValue;
+    maxValue = result.map(Integer::parseInt).orElse(10);
     //return the maxValue
     return maxValue;
   }
 
   /**
-   * Get the desired length of generated array from TextField
+   * Get the desired length of generated array
    *
    * @return int: the desired length of generated array
    */
   private int getArrayLength() {
     //get arrayToSort length from TextField
     //TODO check if the length is a correct value
-    int length = Integer.parseInt(textFieldArrayLength.getText());
+    TextInputDialog dialog = new TextInputDialog("10");
+    dialog.setTitle("Array length insert");
+    dialog.setHeaderText("Insert the length of the array");
+
+    // Traditional way to get the response value.
+    Optional<String> result = dialog.showAndWait();
+    int length;
+    length = result.map(Integer::parseInt).orElse(10);
     //return the length
     return length;
   }
@@ -141,22 +158,55 @@ public class MainController {
     // at animation runtime. Also there isn't a unbind method on Transition
     // because ParallelTransition and SequentialTransition doesn't support it.
     // It's repeated on every other Transition subclasses.
-    Transition transition = transitionQueue.remove();
-    if (transition instanceof ParallelTransition) {
-      ParallelTransition parallelTransition = (ParallelTransition) transition;
-      TranslateTransition translateTransition = (TranslateTransition) parallelTransition
-          .getChildren().get(0);
-      FadeTransition fadeTransition = (FadeTransition) parallelTransition.getChildren().get(1);
-      translateTransition.durationProperty().unbind();
-      fadeTransition.durationProperty().unbind();
-    } else if (transition instanceof TranslateTransition) {
-      TranslateTransition translateTransition = (TranslateTransition) transition;
-      translateTransition.durationProperty().unbind();
-    } else if (transition instanceof FadeTransition) {
-      FadeTransition fadeTransition = (FadeTransition) transition;
-      fadeTransition.durationProperty().unbind();
+    if (!transitionQueue.isEmpty()) {
+      Transition transition = transitionQueue.remove();
+      if (transition instanceof ParallelTransition) {
+        ParallelTransition parallelTransition = (ParallelTransition) transition;
+        TranslateTransition translateTransition = (TranslateTransition) parallelTransition
+            .getChildren().get(0);
+        FadeTransition fadeTransition = (FadeTransition) parallelTransition.getChildren().get(1);
+        translateTransition.durationProperty().unbind();
+        fadeTransition.durationProperty().unbind();
+      } else if (transition instanceof TranslateTransition) {
+        TranslateTransition translateTransition = (TranslateTransition) transition;
+        translateTransition.durationProperty().unbind();
+      } else if (transition instanceof FadeTransition) {
+        FadeTransition fadeTransition = (FadeTransition) transition;
+        fadeTransition.durationProperty().unbind();
+      }
+      transition.play();
     }
-    transition.play();
+  }
+
+  private void addNumberToArray(int number,int position) {
+    //if the new number is greater than the max counter
+    if (number > max) {
+      //update the max counter
+      max = number;
+    }
+    //create a new ArrayElementBox showing the generated random number
+    ArrayElementBox arrayElementBox = new ArrayElementBox(number);
+    //translate the arrayElementBox according to it's position in the array
+    arrayElementBox.setTranslateX(position * boxTotalSize);
+    //add the arrayElement box to the list of array boxes.
+    arrayBoxesToSort.add(arrayElementBox);
+    //add the fade transition to the total sequential transition
+    transitionQueue.add(arrayElementBox.getCreationFadeTransition(stepTransitionEventHandler));
+    //add the array box to the scene
+    animationPane.getChildren().add(arrayElementBox);
+  }
+
+  private void initializeAnimationArea() {
+    //clear animation pane from every possible past animations
+    animationPane.getChildren().clear();
+    //create a new list of stackPanes representing the array to sort
+    arrayBoxesToSort = new ArrayList<>();
+    transitionQueue.clear();
+    max = 0;
+    //set the step by step mode flag to false
+    stepByStep = false;
+    //set the sorting animation as not prepared
+    sortingAnimationPrepared = false;
   }
 
   /**
@@ -169,10 +219,7 @@ public class MainController {
     int length = getArrayLength();
     //get maximum random value requested from user
     int randomMaxValue = getMaxRandomValue();
-    //clear animation pane from every possible past animations
-    animationPane.getChildren().clear();
-    //create a new list of stackPanes representing the array to sort
-    arrayBoxesToSort = new ArrayList<>(length);
+    initializeAnimationArea();
     //increase the animation pane width for containing the array
     animationPane.setPrefWidth(length * (boxTotalSize + 1));
     //create a new random number generator
@@ -183,29 +230,76 @@ public class MainController {
     for (int i = 0; i < length; i++) {
       //generate a random number between 0 and randomMaxValue
       int number = generator.nextInt(randomMaxValue);
-      //if the new number is greater than the max counter
-      if (number > max) {
-        //update the max counter
-        max = number;
-      }
-      //create a new ArrayElementBox showing the generated random number
-      ArrayElementBox arrayElementBox = new ArrayElementBox(number);
-      //translate the arrayElementBox according to it's position in the array
-      arrayElementBox.setTranslateX(i * boxTotalSize);
-      //add the arrayElement box to the list of array boxes.
-      arrayBoxesToSort.add(arrayElementBox);
-      //add the fade transition to the total sequential transition
-      transitionQueue.add(arrayElementBox.getCreationFadeTransition(stepTransitionEventHandler));
-      //add the array box to the scene
-      animationPane.getChildren().add(arrayElementBox);
+      addNumberToArray(number,i);
     }
     //play the first animation on the animation queue
     playNextAnimation();
-    sortingAnimationPrepared = false;
+
+  }
+
+  @FXML
+  private void onUserInputButtonClick() {
+    initializeAnimationArea();
+    boolean userTerminatedInput = false;
+    int position=0;
+    do {
+      TextInputDialog dialog = new TextInputDialog("43");
+      dialog.setTitle("Array values input");
+      dialog.setHeaderText("Insert a value into the array. Press cancel for terminate");
+
+      // Traditional way to get the response value.
+      Optional<String> result = dialog.showAndWait();
+      int value;
+      if (result.isPresent()) {
+        value = Integer.parseInt(result.get());
+        addNumberToArray(value,position);
+        position++;
+        //play the first animation on the animation queue
+        playNextAnimation();
+      } else {
+        userTerminatedInput = true;
+      }
+      } while (!userTerminatedInput);
+  }
+
+  @FXML
+  private void onFileInputButtonClick(ActionEvent ae) {
+    initializeAnimationArea();
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Open text file");
+    fileChooser.getExtensionFilters().add(new ExtensionFilter("Text Files", "*.txt"));
+    Node source = (Node) ae.getSource();
+    Window theStage = source.getScene().getWindow();
+    File selectedFile = fileChooser.showOpenDialog(theStage);
+    if (selectedFile!=null) {
+      Charset charset = Charset.defaultCharset();
+      String line = null;
+      try (BufferedReader reader = Files.newBufferedReader(selectedFile.toPath(), charset)) {
+        int i=0;
+        while ((line = reader.readLine()) != null) {
+          int number = Integer.parseInt(line);
+          addNumberToArray(number,i);
+          i++;
+        }
+        //play the first animation on the animation queue
+        playNextAnimation();
+      } catch (IOException x) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Error opening the file");
+        alert.showAndWait();
+      } catch (NumberFormatException x) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Error parsing the file");
+        alert.setContentText("Cannot parse "+line+" to a number.");
+        initializeAnimationArea();
+        alert.showAndWait();
+      }
+    }
   }
 
   /**
-   * Initialize animation area.
    * Create the three main animation for the sorting phase.
    */
   private void prepareSortingAnimation() {
@@ -333,10 +427,6 @@ public class MainController {
    */
   @FXML
   public void initialize() {
-    //set the step by step mode flag to false
-    stepByStep = false;
-    //set the sorting animation as not prepared
-    sortingAnimationPrepared = false;
     transitionQueue = new LinkedList<>();
     animationsDuration = new AnimationSpeed(animationSpeedSlider.valueProperty());
   }

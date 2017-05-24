@@ -7,7 +7,6 @@
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
@@ -21,26 +20,20 @@
     </graphic>
     <BorderPane prefHeight="200.0" prefWidth="200.0">
       <top>
-        <HBox BorderPane.alignment="CENTER" alignment="CENTER_LEFT" spacing="10.0">
-          <Label alignment="CENTER" text="Array length"/>
-          <TextField prefWidth="80.0" text="10" fx:id="textFieldArrayLength"/>
-          <Label text="Random max value"/>
-          <TextField prefWidth="80.0" text="10" fx:id="textFieldMaxRandomValue"/>
-          <Button mnemonicParsing="false" onAction="#onGenerateArrayButtonClick" text="Generate">
-            <HBox.margin>
-              <Insets left="40.0"/>
-            </HBox.margin>
-          </Button>
-          <Button mnemonicParsing="false" onAction="#OnSortArrayButtonClick" text="Sort"/>
+        <HBox alignment="CENTER_LEFT" spacing="10.0" BorderPane.alignment="CENTER">
+               <Button onAction="#onFileInputButtonClick" text="Input from file" />
+               <Button onAction="#onUserInputButtonClick" text="Input from user" />
+               <Button onAction="#onGenerateArrayButtonClick" text="Random generation" />
+          <Button onAction="#OnSortArrayButtonClick" text="Sort" />
           <VBox spacing="10.0">
             <Label text="Animation speed"/>
-            <Slider blockIncrement="100.0" max="2100.0" min="10.0" rotate="180.0" value="1000.0"
+            <Slider blockIncrement="100.0" max="2100.0" min="10.0" rotate="180.0" value="500.0"
               fx:id="animationSpeedSlider"/>
             <HBox.margin>
               <Insets left="40.0"/>
             </HBox.margin>
           </VBox>
-          <Button mnemonicParsing="false" onAction="#onStepButtonClick" text="Step"/>
+          <Button onAction="#onStepButtonClick" text="Step" />
           <BorderPane.margin>
             <Insets bottom="10.0" left="40.0" top="30.0"/>
           </BorderPane.margin>
@@ -53,5 +46,5 @@
       </center>
     </BorderPane>
   </Tab>
-  <Tab text="Benchmark"/>
+  <Tab text="Benchmark" />
 </TabPane>
