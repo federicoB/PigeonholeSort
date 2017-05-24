@@ -1,3 +1,21 @@
+
+
+/*
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 package visualization;
 
 import java.io.IOException;
@@ -10,31 +28,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
-/**
- * This file is part of PigeonholeSort
- * <p>
- * Created by Federico Bertani on 22/05/17.
- * <p>
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * <p>
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * <p>
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 
 /**
- * This class represent and element of the temporary array used for pigeonhole sorting. It's an
- * array of lists. The list contains elements of equal value of the array to sort. When and {@link
+ * This class represent a pigeon used for pigeonhole sorting method. A pigeon is a list of elements of equal value.
+ * There is a pigeonhole for each value. When an {@link
  * PigeonHole} is created it's only a {@link StackPane} with a {@link
  * javafx.scene.shape.Rectangle} and {@link javafx.scene.text.Text}. When a {@link ArrayElementBox}
  * is added it's moved under the already existent ones. Appropriates animations are provided.
+ *
+ * @author Federico Bertani
  */
 public class PigeonHole extends ArrayElementBox {
 

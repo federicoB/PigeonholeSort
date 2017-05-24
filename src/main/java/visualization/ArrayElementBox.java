@@ -1,14 +1,4 @@
-package visualization;
-
-import java.io.IOException;
-import javafx.animation.FadeTransition;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
-import javafx.util.Duration;
-
-/**
+/*
  * This file is part of PigeonholeSort
  * <p>
  * Created by Federico Bertani on 21/05/17.
@@ -26,6 +16,17 @@ import javafx.util.Duration;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package visualization;
+
+import java.io.IOException;
+import javafx.animation.FadeTransition;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
+import javafx.util.Duration;
+
+
 
 /**
  * This class represent graphically an element of an array. It's made of a {@link StackPane}
@@ -47,6 +48,7 @@ public class ArrayElementBox extends StackPane implements Cloneable {
    * the total size of array box. Equal to the size of a box + its margin
    */
   public final static int boxTotalSize = boxSize + boxMargin;
+
   /**
    * Reference to the text at the center of array box
    */

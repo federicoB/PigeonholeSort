@@ -1,3 +1,19 @@
+/*
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 package visualization;
 
 import static visualization.ArrayElementBox.boxTotalSize;
@@ -33,24 +49,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Window;
 
-/**
- * This file is part of PigeonholeSort
- * <p>
- * Created by Federico Bertani on 20/05/17.
- * <p>
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * <p>
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * <p>
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 public class MainController {
 
   /**
@@ -118,7 +116,7 @@ public class MainController {
    * @return int: the desired maximum possible value
    */
   private int getMaxRandomValue() {
-    //Create a textinput dialog with default value 10
+    //Create a Text Input Dialog  with default value 10
     TextInputDialog dialog = new TextInputDialog("10");
     dialog.setTitle("Max random value input");
     dialog.setHeaderText("Insert the maximum possible value");

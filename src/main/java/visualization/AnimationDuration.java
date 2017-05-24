@@ -1,14 +1,4 @@
-package visualization;
-
-import java.util.HashMap;
-import java.util.Map;
-import javafx.beans.InvalidationListener;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.util.Duration;
-
-/**
+/*
  * This file is part of PigeonholeSort
  *
  * Created by Federico Bertani on 23/05/17.
@@ -26,6 +16,16 @@ import javafx.util.Duration;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package visualization;
+
+import java.util.HashMap;
+import java.util.Map;
+import javafx.beans.InvalidationListener;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.util.Duration;
+
 
 /**
  * This class represent the global value of animation duration.
@@ -35,8 +35,8 @@ import javafx.util.Duration;
  */
 public class AnimationDuration implements ObservableValue<Duration> {
 
-  private DoubleProperty milliseconds;
-  private Map<ChangeListener<? super javafx.util.Duration>, ChangeListener<Number>> changeListeners;
+  private final DoubleProperty milliseconds;
+  private final Map<ChangeListener<? super javafx.util.Duration>, ChangeListener<Number>> changeListeners;
 
   /**
    * Create a new AnimationDuration with the {@link DoubleProperty} given

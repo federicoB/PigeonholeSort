@@ -1,4 +1,4 @@
-package algorithm; /**
+/*
  * This file is part of PigeonholeSort
  * <p>
  * Created by Federico Bertani on 06/05/17.
@@ -17,7 +17,10 @@ package algorithm; /**
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+package algorithm;
+
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Static class containing sort method using pigeonhole algorithm.
@@ -47,19 +50,19 @@ public abstract class PigeonholeSort {
 
   /**
    * Fill a temporary array at position corresponding to values taken from array to sort.
-   * Every position of the array has a linked list for handling multiple equal value.
+   * Every position of the array has a list for handling multiple equal value.
    *
-   * @param tmpArray LinkedList<Type>[]: the array to fill
+   * @param tmpArray List<Type>[]: the array to fill
    * @param arrayToSort Type[]: the array to sort
    * @param <Type> Type of the array, inferred.
    */
-  private static <Type> void fillTmpArray(ArrayList<?>[] tmpArray, Type[] arrayToSort) {
+  private static <Type> void fillTmpArray(List<?>[] tmpArray, Type[] arrayToSort) {
     for (Type element : arrayToSort) {
       Integer hashCode = element.hashCode();
       if (tmpArray[hashCode] == null) {
         tmpArray[hashCode] = new ArrayList<Type>();
       }
-      ArrayList<Type> elementList = (ArrayList<Type>) tmpArray[hashCode];
+      List<Type> elementList = (List<Type>) tmpArray[hashCode];
       elementList.add(element);
     }
   }
@@ -67,15 +70,15 @@ public abstract class PigeonholeSort {
   /**
    * Iterate through an array of list and concat them into the array to sort
    *
-   * @param tmpArray LinkedList<Type>[]: the array to iterate
-   * @param arrayToSort ype[]: the array to sort
+   * @param tmpArray List<Type>[]: the array to iterate
+   * @param arrayToSort Object[]: the array to sort
    * @param <Type> Type of the array, inferred.
    */
-  private static <Type> void fillOrderedArray(ArrayList<?>[] tmpArray, Type[] arrayToSort) {
+  private static <Type> void fillOrderedArray(Object[] tmpArray, Object[] arrayToSort) {
     int i = 0;
     for (Object tmpElement : tmpArray) {
       if (tmpElement != null) {
-        ArrayList<Type> element = (ArrayList<Type>) tmpElement;
+        List<Type> element = (List<Type>) tmpElement;
         int size = element.size();
         System.arraycopy(element.toArray(), 0, arrayToSort, i, size);
         i += size;

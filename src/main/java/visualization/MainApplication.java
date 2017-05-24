@@ -1,4 +1,4 @@
-package visualization; /**
+/*
  * This file is part of PigeonholeSort
  * <p>
  * Created by Federico Bertani on 19/05/17.
@@ -16,6 +16,8 @@ package visualization; /**
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package visualization;
+
 
 import java.io.IOException;
 import javafx.application.Application;
