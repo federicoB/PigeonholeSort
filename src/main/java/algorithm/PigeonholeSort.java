@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Static class containing sort method using pigeonhole algorithm.
+ * Abstract class containing sort method using pigeonhole algorithm.
  *
  * @author Federico Bertani
  * @see <a href="https://en.wikipedia.org/wiki/Pigeonhole_sort">Wikipedia page for pigeonhole

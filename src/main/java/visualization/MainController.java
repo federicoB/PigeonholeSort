@@ -33,6 +33,7 @@ import java.util.Random;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
+import javafx.animation.SequentialTransition;
 import javafx.animation.Transition;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
@@ -291,11 +292,20 @@ public class MainController {
       Optional<String> result = dialog.showAndWait();
       int value;
       if (result.isPresent()) {
-        value = Integer.parseInt(result.get());
-        addNumberToArray(value, position);
-        position++;
-        //play the first animation on the animation queue
-        playNextAnimation();
+        try {
+          value = Integer.parseInt(result.get());
+          if (value>=0) {
+            addNumberToArray(value, position);
+            position++;
+            //play the first animation on the animation queue
+            playNextAnimation();
+          } else {
+            showErrorMessage("Please insert a positive number");
+          }
+        }
+        catch (NumberFormatException x) {
+          showErrorMessage("Cannot parse "+result.get()+" to a number.");
+        }
       } else {
         userTerminatedInput = true;
         if (position > 0) {
@@ -310,6 +320,7 @@ public class MainController {
 
   @FXML
   private void onFileInputButtonClick(ActionEvent ae) {
+    SequentialTransition sequentialTransition;
     initializeAnimationArea();
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Open text file");
@@ -324,8 +335,10 @@ public class MainController {
         int numberOfElementsRead = 0;
         while ((line = reader.readLine()) != null) {
           int number = Integer.parseInt(line);
-          addNumberToArray(number, numberOfElementsRead);
-          numberOfElementsRead++;
+          if (number>=0) {
+            addNumberToArray(number, numberOfElementsRead);
+            numberOfElementsRead++;
+          } else throw new NumberFormatException();
         }
         if (numberOfElementsRead > 0) {
           sortButton.setDisable(false);
@@ -338,7 +351,7 @@ public class MainController {
         showErrorMessage("Error opening the file");
       } catch (NumberFormatException x) {
         initializeAnimationArea();
-        showErrorMessage("Cannot parse " + line + " to a number.");
+        showErrorMessage("Cannot parse " + line + " to a positive number.");
       }
     }
   }

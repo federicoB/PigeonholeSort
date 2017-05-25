@@ -135,16 +135,16 @@ public class PigeonHole extends ArrayElementBox {
   }
 
   /**
-   * Returns the size of the list of array box of this element
+   * Returns the size of the list of array box of this pigeonhole
    *
-   * @return int: the size of the list of array box of this element
+   * @return int: the size of the list of array box of this pigeonhole
    */
   public int getListSize() {
     return this.listOfArrayBoxes.size();
   }
 
   /**
-   * load the fxml representing this graphical object. This method override the method declared in
+   * load the fxml representing this pigeonhole. This method override the method declared in
    * {@link ArrayElementBox} for changing the fxml file path.
    */
   protected void loadFXML() {

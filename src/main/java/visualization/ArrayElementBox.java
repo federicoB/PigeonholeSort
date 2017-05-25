@@ -78,6 +78,9 @@ public class ArrayElementBox extends StackPane implements Cloneable {
     this.setOpacity(0);
   }
 
+  /**
+   * load the fxml representing this {@link ArrayElementBox}.
+   */
   protected void loadFXML() {
     //Create a new FXMLLoader that will load fxml from file
     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/arrayElement.fxml"));

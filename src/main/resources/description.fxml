@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<BorderPane prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.131" xmlns:fx="http://javafx.com/fxml/1">
+  <top>
+    <VBox>
+      <Label text="Description" wrapText="true"><font><Font name="System Bold" size="18.0" /></font></Label>
+    <Label text="The pigeonhole sorting algorithm is a linear time sorting algorithm.
+     &#13;The use of memory is also linear to the range of possible values in the array,
+     &#13;this results in large memory consumption compared to commons O(nlog) comparison based  like quicksort and mergesort.
+     &#13;The algorithm use a support array with size equal to the range of possible values in the array.&#13;Each element of this array could be called 'pigenhole'.
+     &#13;Elements of the array to sort are moved to the respective pigeonhole according to their value.
+     &#13;Then the pigeonholes are scanned sequentially and the elements are moved back in the array in a sort order.&#13;" wrapText="true"><font>
+    <Font size="16.0" />
+    </font></Label>
+    </VBox>
+  </top>
+  <left>
+    <VBox>
+      <Label text="Pseudocode" wrapText="true"><font><Font name="System Bold" size="18.0" /></font></Label>
+    <Label text="void pigeonHoleSort(Item[] A)&#13;   int max = max(A)&#13;   C = List&lt;Item&gt;[0..max] &#13;   for i=0 to A.length &#13;       C[A[i]].add(A[i])&#13;       int j=0 &#13;       for i=0 to C.length &#13;            for k=0 to C[i].length &#13;                 C[j]=C[i][k] &#13;                 j++ &#13; " wrapText="true" xmlns="http://javafx.com/javafx/8.0.131" xmlns:fx="http://javafx.com/fxml/1">
+      <font>
+        <Font size="16.0" />
+      </font>
+    </Label>
+         <BorderPane.margin>
+            <Insets top="20.0" />
+         </BorderPane.margin>
+    </VBox>
+  </left>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+</BorderPane>

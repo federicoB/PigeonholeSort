@@ -53,7 +53,7 @@
       </center>
     </BorderPane>
   </Tab>
-  <Tab text="Pseudocode">
-    <fx:include source="pseudoCode.fxml" />
+  <Tab text="Description">
+    <fx:include source="description.fxml" />
   </Tab>
 </JFXTabPane>

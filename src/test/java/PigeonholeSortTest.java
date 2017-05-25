@@ -19,9 +19,9 @@
 
 import static org.junit.Assert.assertTrue;
 
-import algorithm.Main;
 import algorithm.PigeonholeSort;
 import java.util.Arrays;
+import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,7 +35,11 @@ public class PigeonholeSortTest {
 
   @Before
   public void setUp() throws Exception {
-    array = Main.initializeArray();
+    Random random = new Random();
+    array = new Integer[1000];
+    for (int i=0;i<1000;i++) {
+      array[i] = random.nextInt(100);
+    }
   }
 
   /**
