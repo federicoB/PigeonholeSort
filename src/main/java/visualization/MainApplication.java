@@ -42,7 +42,7 @@ public class MainApplication extends Application {
     //create a new scene with first child element the tabPane
     Scene scene = new Scene(root);
     //set window title
-    primaryStage.setTitle("algorithm.PigeonholeSort sort");
+    primaryStage.setTitle("Pigeonhole sort");
     //set the stage scene
     primaryStage.setScene(scene);
     //show the stage
