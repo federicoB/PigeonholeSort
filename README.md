@@ -1,5 +1,7 @@
 # Pigeonhole sort + visualization
 
+<img style="width:100%;" src="https://i.imgur.com/Pugap5g.gif"/>
+
 ## Installation
 Clone the project:
 ```
