@@ -2,6 +2,8 @@
 
 <img style="width:100%;" src="https://i.imgur.com/Pugap5g.gif"/>
 
+Project made for the algorithm course of Computer Science Degree of University of Bologna.
+
 ## Installation
 Clone the project:
 ```
