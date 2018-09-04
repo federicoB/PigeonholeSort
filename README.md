@@ -13,14 +13,10 @@ gradle jfxjar
 ```
 In the main directory it will be created the .jar and the ```lib``` with the dependencies.
 
-
-### Project structure
-
-The project has 2 packages:
-* algorithm: contains the abstract PigeonholeSort class that provides polymorphic methods for sorting.
-* visualization: set of classes to create the javaFx application that displays the execution of the algorithm.
-
-The pigeonholeSort class is not used directly in visualization but the sorting method is the same.
+## Contributing
+Useful links:
+* [Main java sources with project structure description](https://github.com/federicoB/PigeonholeSort/tree/master/src/main/java)
+* [Relevant design choices](https://github.com/federicoB/PigeonholeSort/wiki/Relevant-design-choices)
 
 ## License
 This project is licensed under the terms of the GNU General Public License v3.
