@@ -1,4 +1,15 @@
 language: java
+jdk:
+  - openjdk11  # You can specify the JDK version you want to use
 
-install:
-  - gradle jfxJar
+# Cache Gradle dependencies to speed up builds
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
+# Define the script to run during the build
+script:
+  - gradle build
+
+

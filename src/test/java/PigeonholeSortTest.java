@@ -17,33 +17,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import static org.junit.Assert.assertTrue;
-
 import algorithm.PigeonholeSort;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import java.util.Arrays;
 import java.util.Random;
-import org.junit.Before;
-import org.junit.Test;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Unit testing for PigeonHole sort class
+ * 
  * @author Federico Bertani
  */
 public class PigeonholeSortTest {
 
   private Integer[] array;
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     Random random = new Random();
     array = new Integer[1000];
-    for (int i=0;i<1000;i++) {
+    for (int i = 0; i < 1000; i++) {
       array[i] = random.nextInt(100);
     }
   }
 
   /**
    * Test for performance of pigeonhole sort
+   * 
    * @throws Exception
    */
   @Test
@@ -53,6 +56,7 @@ public class PigeonholeSortTest {
 
   /**
    * Test for performance comparison of java quicksort
+   * 
    * @throws Exception
    */
   @Test
@@ -62,6 +66,7 @@ public class PigeonholeSortTest {
 
   /**
    * Test for performance comparison of parallel merge sort
+   * 
    * @throws Exception
    */
   @Test
@@ -71,6 +76,7 @@ public class PigeonholeSortTest {
 
   /**
    * Test for pigeonhole sort correctness
+   * 
    * @throws Exception
    */
   @Test
@@ -81,5 +87,4 @@ public class PigeonholeSortTest {
       assertTrue(array[i] <= array[i + 1]);
     }
   }
-
 }
