@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.com/federicoB/PigeonholeSort.svg?branch=master)](https://travis-ci.com/federicoB/PigeonholeSort)
-
 # Pigeonhole sort + visualization
 
 <img style="width:100%;" src="https://i.imgur.com/Pugap5g.gif"/>
