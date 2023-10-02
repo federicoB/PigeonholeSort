@@ -10,12 +10,26 @@ Clone the project:
 git clone https://github.com/federicoB/PigeonholeSort
 ```
 
-To compile the project you must have [gradle](https://gradle.org/install/) installed in your system.
-Execute the command to build:
+Install sdkman to handle dependencies:
 ```
-gradle jfxjar
+curl -s "https://get.sdkman.io" | bash
 ```
-In the main directory it will be created the .jar and the ```lib``` with the dependencies.
+Open a new terminal and run
+```
+source "$HOME/.sdkman/bin/sdkman-init.sh"
+```
+Create sdkman environment:
+```
+sdk env init
+```
+Install dependencies:
+```
+sdk env install
+```
+Run the program:
+```
+gradle run
+```
 
 ## Contributing
 Useful links:
